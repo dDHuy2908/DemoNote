@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_ADD = 1;
     private ActivityMainBinding binding;
 
-    private ArrayList<Note> data;
+    private ArrayList<Note> data = new ArrayList<>();
     private NoteAdapter adapter;
 
     @Override
@@ -39,11 +39,15 @@ public class MainActivity extends AppCompatActivity {
         adapter = new NoteAdapter(getLayoutInflater());
         binding.rvNote.setAdapter(adapter);
         adapter.setData(data);
+        if (data.size() == 0) {
+            binding.tvEmptyNotes.setVisibility(View.VISIBLE);
+        } else {
+            binding.tvEmptyNotes.setVisibility(View.GONE);
+        }
     }
 
     private void addNewNote() {
         Intent intent = new Intent(this, EditNoteActivity.class);
-        startActivity(intent);
         startActivityForResult(intent, REQUEST_ADD);
     }
 }
