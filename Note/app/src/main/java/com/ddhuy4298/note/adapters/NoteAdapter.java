@@ -8,14 +8,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ddhuy4298.note.databinding.ItemNoteBinding;
+import com.ddhuy4298.note.listener.NoteClickedListener;
 import com.ddhuy4298.note.models.Note;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
 
     private ArrayList<Note> data;
     private LayoutInflater inflater;
+    private NoteClickedListener listener;
+    private boolean multipleCheck = false;
 
     public NoteAdapter(LayoutInflater inflater) {
         this.inflater = inflater;
@@ -24,6 +28,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     public void setData(ArrayList<Note> data) {
         this.data = data;
         notifyDataSetChanged();
+    }
+
+    public void setListener(NoteClickedListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -36,6 +44,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     @Override
     public void onBindViewHolder(@NonNull NoteHolder holder, int position) {
         holder.binding.setItem(data.get(position));
+        if (listener != null) {
+            holder.binding.setListener(listener);
+        }
+        if (multipleCheck) {
+            holder.binding.checkbox.setVisibility(View.VISIBLE); // show checkBox if multiMode on
+            holder.binding.checkbox.setChecked(data.get(position).isChecked());
+        } else holder.binding.checkbox.setVisibility(View.GONE); // hide checkBox if multiMode off
     }
 
     @Override
@@ -51,5 +66,24 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             super(binding.getRoot());
             this.binding = binding;
         }
+    }
+
+    public void setMultipleCheck(boolean multipleCheck) {
+        this.multipleCheck = multipleCheck;
+        if (!multipleCheck) {
+            for (Note note : data) {
+                note.setChecked(false);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<Note> getCheckedNotes() {
+        ArrayList<Note> checkedNotes = new ArrayList<>();
+        for (Note note : data) {
+            if (note.isChecked())
+                checkedNotes.add(note);
+        }
+        return checkedNotes;
     }
 }
