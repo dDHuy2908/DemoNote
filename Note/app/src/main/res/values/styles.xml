@@ -9,18 +9,26 @@
         <item name="actionModeBackground">@color/colorPrimary</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="actionModeBackground">@color/colorPrimary</item>
+    <style name="AppTheme.Dark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary_dark_theme</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark_dark_theme</item>
+        <item name="colorAccent">@color/colorAccent_dark_theme</item>
         <item name="actionMenuTextColor">#fff</item>
-        <item name="actionBarTheme">@style/AppTheme.ActionBarTheme</item>
+        <item name="actionModeBackground">@color/colorPrimary_dark_theme</item>
     </style>
 
-    <style name="AppTheme.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">@color/white</item>
-    </style>
+<!--    <style name="AppTheme.NoActionBar">-->
+<!--        <item name="windowActionBar">false</item>-->
+<!--        <item name="windowNoTitle">true</item>-->
+<!--        <item name="windowActionModeOverlay">true</item>-->
+<!--        <item name="actionModeBackground">@color/colorPrimary</item>-->
+<!--        <item name="actionMenuTextColor">#fff</item>-->
+<!--        <item name="actionBarTheme">@style/AppTheme.ActionBarTheme</item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">-->
+<!--        <item name="colorControlNormal">@color/white</item>-->
+<!--    </style>-->
 
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash</item>

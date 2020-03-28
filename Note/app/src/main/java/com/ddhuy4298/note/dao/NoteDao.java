@@ -25,6 +25,6 @@ public interface NoteDao {
     @Delete
     void deleteNote(Note ... note);
 
-    @Query("SELECT * FROM Note WHERE noteDate = :noteDate")
-    Note getNoteByNoteDate(long noteDate);
+    @Query("SELECT * FROM Note WHERE noteId = :id")
+    Note getNoteById(int id);
 }

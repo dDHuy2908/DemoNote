@@ -1,18 +1,18 @@
 package com.ddhuy4298.note.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.ActionMode;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 
 import com.ddhuy4298.note.R;
@@ -39,16 +39,12 @@ public class MainActivity extends AppCompatActivity implements NoteClickedListen
     private NoteAdapter adapter;
     private int checked = 0;
     private MainActionModeCallBack actionModeCallBack;
-
+    private SimpleDateFormat format = new SimpleDateFormat("HH:mm dd/MM/yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
-//        setSupportActionBar(binding.toolbar);
-//        binding.toolbar.setTitle("Note");
-//        binding.toolbar.setTitleTextColor(getResources().getColor(R.color.colorAccent));
 
         binding.fab.setOnClickListener(this);
 
@@ -75,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NoteClickedListen
     @Override
     public void onNoteClickedListener(Note note) {
         Intent intent = new Intent(this, EditNoteActivity.class);
-        intent.putExtra(EXTRA_NOTE_UPDATE, note.getNoteDate());
+        intent.putExtra(EXTRA_NOTE_UPDATE, note.getNoteId());
         startActivity(intent);
     }
 
@@ -113,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements NoteClickedListen
             @Override
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 if (menuItem.getItemId() == R.id.action_mode_delete)
-                    onDeleteMultiNotes();
+                    onDeleteNote();
                 else if (menuItem.getItemId() == R.id.action_mode_share)
                     onShareNote();
 
@@ -139,13 +135,27 @@ public class MainActivity extends AppCompatActivity implements NoteClickedListen
         binding.fab.setVisibility(View.VISIBLE);
     }
 
-    private void onDeleteMultiNotes() {
+    private void onDeleteNote() {
         if (adapter.getCheckedNotes().size() != 0) {
-            for (Note note : adapter.getCheckedNotes()) {
-                NoteDatabase.getInstance(this).getNoteDao().deleteNote(note);
-            }
-            loadNote();
-            Toast.makeText(this, "Deleted!", Toast.LENGTH_SHORT).show();
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setMessage("Do you want to delete " + adapter.getCheckedNotes().size() + " notes?")
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            for (Note note : adapter.getCheckedNotes()) {
+                                NoteDatabase.getInstance(MainActivity.this).getNoteDao().deleteNote(note);
+                            }
+                            loadNote();
+                            Toast.makeText(MainActivity.this, "Deleted!", Toast.LENGTH_SHORT).show();
+                        }
+                    }).create();
+            dialog.show();
         } else {
             Toast.makeText(this, "No note to delete!", Toast.LENGTH_SHORT).show();
         }
@@ -155,7 +165,6 @@ public class MainActivity extends AppCompatActivity implements NoteClickedListen
         Note note = adapter.getCheckedNotes().get(0);
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm dd/MM/yyyy");
         String content = note.getNoteContent()
                 + "\n"
                 + format.format(note.getNoteDate())
@@ -180,5 +189,20 @@ public class MainActivity extends AppCompatActivity implements NoteClickedListen
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.setting) {
+            Intent intent = new Intent(this, SettingActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

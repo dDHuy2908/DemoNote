@@ -14,6 +14,8 @@ import com.ddhuy4298.note.dao.NoteDatabase;
 import com.ddhuy4298.note.databinding.ActivityEditNoteBinding;
 import com.ddhuy4298.note.models.Note;
 
+import java.text.SimpleDateFormat;
+
 import static com.ddhuy4298.note.activities.MainActivity.EXTRA_NOTE_UPDATE;
 
 public class EditNoteActivity extends AppCompatActivity {
@@ -21,6 +23,7 @@ public class EditNoteActivity extends AppCompatActivity {
     private ActivityEditNoteBinding binding;
 
     private Note note;
+    private SimpleDateFormat format = new SimpleDateFormat("HH:mm dd/MM/yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +41,10 @@ public class EditNoteActivity extends AppCompatActivity {
         });
 
         if (getIntent().hasExtra(EXTRA_NOTE_UPDATE)) {
-            long noteDate = getIntent().getExtras().getLong(EXTRA_NOTE_UPDATE, 0);
-            note = NoteDatabase.getInstance(this).getNoteDao().getNoteByNoteDate(noteDate);
+            int noteId = getIntent().getExtras().getInt(EXTRA_NOTE_UPDATE, 0);
+            note = NoteDatabase.getInstance(this).getNoteDao().getNoteById(noteId);
             binding.edtNoteContent.setText(note.getNoteContent());
+            binding.tvNoteDate.setText(format.format(note.getNoteDate()));
         } else {
             binding.edtNoteContent.setFocusable(true);
         }
@@ -75,6 +79,7 @@ public class EditNoteActivity extends AppCompatActivity {
                 NoteDatabase.getInstance(this).getNoteDao().insertNote(note);
             } else {
                 note.setNoteContent(content);
+                note.setNoteDate(System.currentTimeMillis());
                 NoteDatabase.getInstance(this).getNoteDao().updateNote(note);
             }
             finish();

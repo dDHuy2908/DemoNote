@@ -9,7 +9,10 @@ import androidx.room.PrimaryKey;
 public class Note {
 
     @ColumnInfo
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private int noteId;
+
+    @ColumnInfo
     private long noteDate = System.currentTimeMillis();
 
     @ColumnInfo
@@ -17,6 +20,14 @@ public class Note {
 
     @Ignore
     private boolean checked = false;
+
+    public int getNoteId() {
+        return noteId;
+    }
+
+    public void setNoteId(int noteId) {
+        this.noteId = noteId;
+    }
 
     public String getNoteContent() {
         return noteContent;
