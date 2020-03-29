@@ -31,7 +31,9 @@
             android:theme="@style/EditNoteTheme" />
         <activity
             android:name=".activities.SettingActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".activities.MainActivity">
+        </activity>
     </application>
 
 </manifest>

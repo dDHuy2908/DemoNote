@@ -46,6 +46,7 @@ public class EditNoteActivity extends AppCompatActivity {
             binding.edtNoteContent.setText(note.getNoteContent());
             binding.tvNoteDate.setText(format.format(note.getNoteDate()));
         } else {
+            binding.tvNoteDate.setText(format.format(System.currentTimeMillis()));
             binding.edtNoteContent.setFocusable(true);
         }
     }

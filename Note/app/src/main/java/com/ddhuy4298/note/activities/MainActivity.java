@@ -3,6 +3,7 @@ package com.ddhuy4298.note.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements NoteClickedListener, View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NoteClickedListener, View.OnClickListener {
 
     public static final String EXTRA_NOTE_UPDATE = "note_update";
 
@@ -136,8 +137,9 @@ public class MainActivity extends AppCompatActivity implements NoteClickedListen
     }
 
     private void onDeleteNote() {
-        if (adapter.getCheckedNotes().size() != 0) {
-            AlertDialog dialog = new AlertDialog.Builder(this)
+        final ArrayList<Note> checkedNotes = adapter.getCheckedNotes();
+        if (checkedNotes.size() != 0) {
+            AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
                     .setMessage("Do you want to delete " + adapter.getCheckedNotes().size() + " notes?")
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
@@ -148,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements NoteClickedListen
                     .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            for (Note note : adapter.getCheckedNotes()) {
+                            for (Note note : checkedNotes) {
                                 NoteDatabase.getInstance(MainActivity.this).getNoteDao().deleteNote(note);
                             }
                             loadNote();
@@ -184,11 +186,6 @@ public class MainActivity extends AppCompatActivity implements NoteClickedListen
     protected void onResume() {
         super.onResume();
         loadNote();
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
     }
 
     @Override

@@ -10,7 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.ddhuy4298.note.models.Note;
 
-@Database(entities = {Note.class}, version = 2, exportSchema = false)
+@Database(entities = {Note.class}, version = 1, exportSchema = false)
 public abstract class NoteDatabase extends RoomDatabase {
 
     private static NoteDatabase instance;
@@ -19,7 +19,6 @@ public abstract class NoteDatabase extends RoomDatabase {
         if (instance == null) {
             instance = Room.databaseBuilder(context, NoteDatabase.class, "Note")
                     .allowMainThreadQueries()
-                    .fallbackToDestructiveMigration()
                     .build();
         }
         return instance;
