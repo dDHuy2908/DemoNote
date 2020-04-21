@@ -27,34 +27,7 @@ public class SettingFragment extends PreferenceFragmentCompat implements SharedP
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-//        if (key.equals("dark_theme")) {
-//            final SwitchPreference darkThemeSwitch = findPreference(key);
-//            if (darkThemeSwitch != null) {
-//                darkThemeSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-//                    @Override
-//                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-//                        if (darkThemeSwitch.isChecked()) {
-//                            SettingActivity.shared.edit().putInt(THEME_KEY, R.style.AppTheme_Dark).apply();
-//                            Toast.makeText(getContext(), "Dark", Toast.LENGTH_SHORT).show();
-////                        darkThemeSwitch.setChecked((Boolean) newValue);
-//                        } else {
-//                            SettingActivity.shared.edit().putInt(THEME_KEY, R.style.AppTheme).apply();
-//                            Toast.makeText(getContext(), "Light",Toast.LENGTH_SHORT).show();
-////                        darkThemeSwitch.setChecked((Boolean) newValue);
-//                        }
-//                        return true;
-//                    }
-//                });
-//            }
-//        }
-        Boolean b = SettingActivity.shared.getBoolean("dark_theme", false);
-        if (b) {
-            SettingActivity.shared.edit().putInt(THEME_KEY, R.style.AppTheme_Dark).apply();
-            Toast.makeText(getContext(), R.style.AppTheme_Dark + "", Toast.LENGTH_SHORT).show();
-        } else {
-            SettingActivity.shared.edit().putInt(THEME_KEY, R.style.AppTheme).apply();
-            Toast.makeText(getContext(), R.style.AppTheme + "", Toast.LENGTH_SHORT).show();
-        }
+
     }
 
     @Override
